@@ -46,23 +46,39 @@
               <h5 class="modal-title">Novo Produto</h5>
             </div>
             <div class="modal-body">
-              <input type="hidden" id="id" class="form-control">
+            <div class="form-group">
+                <label for="ModoAmbiente" class="control-label">Modo de ambiente</label>
+                <br>
+                <label class="radio-inline">
+              <input type="radio" name="ModoAmbiente" id="ModoAmbiente" value="false"> Pruebas
+             </label>
+             <br>
+            <label class="radio-inline">
+              <input type="radio" name="ModoAmbiente" id="ModoAmbiente" value="true"> Producción
+            </label>
+              </div>
               <div class="form-group">
-                <label for="nomeProduto" class="control-label">Nome do Produto</label>
+                <label for="Merchand_id" class="control-label">Merchand ID</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" id="nomeProduto" placeholder="Nome do produto">
+                  <input type="text" class="form-control" id="Merchand_id" placeholder="Merchand_id">
                 </div>
               </div>
               <div class="form-group">
-                <label for="precoProduto" class="control-label">Preço</label>
+                <label for="secret_key" class="control-label">LLave secreta(sk)</label>
                 <div class="input-group">
-                  <input type="number" class="form-control" id="precoProduto" placeholder="Preço do produto">
+                  <input type="text" class="form-control" id="secret_key" placeholder="LLave secreta">
                 </div>
               </div>
               <div class="form-group">
-                <label for="quantidadeProduto" class="control-label">Quantidade</label>
+                <label for="customer_id" class="control-label">Customer id</label>
                 <div class="input-group">
-                  <input type="number" class="form-control" id="quantidadeProduto" placeholder="Quantidade do produto">
+                  <input type="text" class="form-control" id="customer_id" placeholder="Id Cliente">
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="Monto" class="control-label">Monto</label>
+                <div class="input-group">
+                  <input type="number" class="form-control" id="Monto" placeholder="Monto de la comisión">
                 </div>
               </div>
               
@@ -86,32 +102,35 @@
         }
     });
 
-    function criarProduto() {
+    function crearComision() {
         let produto = {
-            nome: $('#nomeProduto').val(),
-            preco: $('#precoProduto').val(),
-            estoque: $('#quantidadeProduto').val(),
-            categoria_id: $('#departamentoProduto').val()
+            ModoAmbiente: $('#ModoAmbiente').val(),
+            Merchand_id: $('#Merchand_id').val(),
+            secret_key: $('#secret_key').val(),
+            customer_id: $('#customer_id').val(),
+            Monto: $('#Monto').val()
         };
 
         console.log(produto);
 
-        $.post('/api/createComision', produto, function(data) {
-            let produto = JSON.parse(data);
-            console.log(produto);
-
-            let linha = montarLinha(produto);
-            $('#tabelaProdutos>tbody').append(linha);
+        $.ajax({
+            type: 'POST', //aqui puede ser igual get
+            url: '/api/createComision', //aqui va tu direccion donde esta tu funcion php
+            data: produto, //aqui tus datos
+            success: function(response) {
+                var data = JSON.parse(response)
+                console.log(data);
+            },
+            error: function(data) {
+                console.log(JSON.stringify(response));
+                console.log("bad");
+            }
         });
     }
 
     $('#formProduto').submit(function(event) {
         event.preventDefault();
-        if($('#id').val() != '') {
-            editarProduto();
-        } else {
-            criarProduto();
-        }
+        crearComision();
     });
 
     </script>
