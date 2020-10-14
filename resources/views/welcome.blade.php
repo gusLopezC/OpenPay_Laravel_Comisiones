@@ -6,6 +6,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+
     <title>Cobro de comisiones</title>
     <style>
       body {
@@ -29,12 +30,6 @@
       <li class="nav-item">
         <a class="nav-link" href="/">Home</a>
       </li>
-      <li class="nav-item">
-        <a class="nav-link" href="/produtos">Produtos</a>
-      </li>
-      <li  class="nav-item">
-        <a class="nav-link" href="/categorias">Categorias</a>
-      </li>
     </ul>
   </div>
 </nav>
@@ -43,49 +38,48 @@
         <div class="modal-content">
           <form id="formProduto" class="form-horizontal">
             <div class="modal-header">
-              <h5 class="modal-title">Novo Produto</h5>
+              <h5 class="modal-title">Cobro de comisión</h5>
             </div>
             <div class="modal-body">
             <div class="form-group">
                 <label for="ModoAmbiente" class="control-label">Modo de ambiente</label>
                 <br>
-                <label class="radio-inline">
-              <input type="radio" name="ModoAmbiente" id="ModoAmbiente" value="false"> Pruebas
+                <label>
+              <input type="radio" name="test" value="false"> Pruebas
              </label>
              <br>
-            <label class="radio-inline">
-              <input type="radio" name="ModoAmbiente" id="ModoAmbiente" value="true"> Producción
+            <label>
+              <input type="radio" name="test" value="true"> Producción
             </label>
               </div>
               <div class="form-group">
                 <label for="Merchand_id" class="control-label">Merchand ID</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" id="Merchand_id" placeholder="Merchand_id">
+                  <input type="text" class="form-control" id="Merchand_id" placeholder="Merchand_id" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="secret_key" class="control-label">LLave secreta(sk)</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" id="secret_key" placeholder="LLave secreta">
+                  <input type="text" class="form-control" id="secret_key" placeholder="LLave secreta" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="customer_id" class="control-label">Customer id</label>
                 <div class="input-group">
-                  <input type="text" class="form-control" id="customer_id" placeholder="Id Cliente">
+                  <input type="text" class="form-control" id="customer_id" placeholder="Id Cliente" required>
                 </div>
               </div>
               <div class="form-group">
                 <label for="Monto" class="control-label">Monto</label>
                 <div class="input-group">
-                  <input type="number" class="form-control" id="Monto" placeholder="Monto de la comisión">
+                  <input type="number" class="form-control" id="Monto" placeholder="Monto de la comisión" required>
                 </div>
               </div>
               
             </div>
             <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Salvar</button>
-              <button type="cancel" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+              <button type="submit" class="btn btn-primary btn-block">Salvar</button>
             </div>
           </form>
         </div>
@@ -93,6 +87,7 @@
       </main>
     </div>
     <script src="{{ asset('js/app2.js') }}"></script>
+    <script src="{{ asset('js/sweetalert2.all.min.js') }}"></script>
 
     <script type="text/javascript">
 
@@ -103,8 +98,9 @@
     });
 
     function crearComision() {
+
         let produto = {
-            ModoAmbiente: $('#ModoAmbiente').val(),
+            ModoAmbiente: $("input[name='test']:checked").val(),
             Merchand_id: $('#Merchand_id').val(),
             secret_key: $('#secret_key').val(),
             customer_id: $('#customer_id').val(),
@@ -120,9 +116,12 @@
             success: function(response) {
                 var data = JSON.parse(response)
                 console.log(data);
+                mensaje();
+                $('#customer_id').val('');
+                $('#Monto').val('');
             },
             error: function(data) {
-                console.log(JSON.stringify(response));
+                mensajeError();
                 console.log("bad");
             }
         });
@@ -132,6 +131,24 @@
         event.preventDefault();
         crearComision();
     });
+
+    function mensaje() {
+
+      Swal.fire(
+      'Comisión exitosa',
+      'Saldo cobrado exitosamente',
+      'success'
+      );
+    }
+
+    function mensajeError() {
+
+      Swal.fire({
+      icon: 'error',
+      title: 'Oops...',
+      text: 'Ocurrio un error, revisa los logs para mayor información',
+      });
+    }
 
     </script>
  
