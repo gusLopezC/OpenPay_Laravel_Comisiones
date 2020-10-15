@@ -73,7 +73,7 @@
               <div class="form-group">
                 <label for="Monto" class="control-label">Monto</label>
                 <div class="input-group">
-                  <input type="number" class="form-control" id="Monto" placeholder="Monto de la comisión" required>
+                  <input type="number" step='0.01' class="form-control" id="Monto" placeholder="Monto de la comisión" required>
                 </div>
               </div>
               
